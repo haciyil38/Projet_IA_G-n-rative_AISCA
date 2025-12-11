@@ -55,8 +55,8 @@ aisca/
 
 ## 👥 Auteurs
 
-- [Membre 1] - Backend & NLP
-- [Membre 2] - Frontend & GenAI
+- Haci
+- Neïl
 
 ## 📄 Licence
 

@@ -1,0 +1,30 @@
+# Interface web
+streamlit
+
+# NLP et embeddings (coeur du projet - EF2.2)
+sentence-transformers
+transformers
+
+# Calculs scientifiques - VERSIONS RÉCENTES pour Python 3.14
+numpy>=1.26.0
+pandas>=2.1.0
+scikit-learn>=1.4.0
+
+# IA Générative (EF4)
+google-generativeai
+
+# Visualisations (Viz.1)
+plotly
+matplotlib
+
+# Utilitaires
+python-dotenv
+requests
+
+# Deep Learning (pour SBERT)
+torch
+torchvision
+
+# Tests
+pytest
+pytest-cov

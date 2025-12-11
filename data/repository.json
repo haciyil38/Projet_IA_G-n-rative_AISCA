@@ -1,0 +1,53 @@
+{
+  "competency_blocks": [
+    {
+      "block_id": "B01",
+      "block_name": "Data Analysis",
+      "competencies": [
+        {
+          "comp_id": "C01",
+          "description": "data cleaning and preprocessing with pandas",
+          "keywords": ["pandas", "preprocessing", "cleaning", "data quality"]
+        },
+        {
+          "comp_id": "C02",
+          "description": "data visualization with matplotlib and seaborn",
+          "keywords": ["visualization", "matplotlib", "seaborn", "charts"]
+        },
+        {
+          "comp_id": "C03",
+          "description": "statistical analysis and hypothesis testing",
+          "keywords": ["statistics", "hypothesis testing", "analysis"]
+        }
+      ]
+    },
+    {
+      "block_id": "B02",
+      "block_name": "Machine Learning",
+      "competencies": [
+        {
+          "comp_id": "C04",
+          "description": "supervised learning classification and regression",
+          "keywords": ["classification", "regression", "supervised learning"]
+        },
+        {
+          "comp_id": "C05",
+          "description": "neural networks and deep learning",
+          "keywords": ["neural networks", "deep learning", "tensorflow", "pytorch"]
+        }
+      ]
+    }
+  ],
+  "job_profiles": [
+    {
+      "job_id": "J01",
+      "job_title": "Data Analyst",
+      "required_competencies": ["C01", "C02", "C03"]
+    },
+    {
+      "job_id": "J02",
+      "job_title": "Machine Learning Engineer",
+      "required_competencies": ["C01", "C04", "C05"]
+    }
+  ]
+}

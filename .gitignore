@@ -1,59 +1,41 @@
-# Environnements virtuels
-venv/
-env/
-.venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Clés API et configuration sensible (CRITIQUE!)
-.env
-config_local.py
-*.key
-
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-*.egg-info/
-dist/
-build/
-*.egg
+venv/
+env/
+ENV/
 
-# Cache et données temporaires
-*.npz
-*.pkl
-*.h5
-models_cache/
-.streamlit/
+# Données sensibles
+.env
+*.env
+config_local.py
+
+# Cache et embeddings
+data/repo_embeddings.npz
+genai/models_cache/
+*.cache
+
+# Modèles locaux (trop gros)
+models/
+.ollama/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 .DS_Store
-
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb
 
 # Logs
 *.log
-logs/
-
-# Données sensibles utilisateur
-data/user_responses/*.json
-!data/user_responses/.gitkeep
 
 # Tests
 .pytest_cache/
 .coverage
 htmlcov/
 
-# OS
-Thumbs.db
-.DS_Store
+# Streamlit
+.streamlit/secrets.toml

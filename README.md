@@ -19,7 +19,7 @@ Application d'analyse sémantique des compétences combinant :
 ### Étapes
 
 1. **Cloner le repository**
-git clone <votre-repo>
+git clone https://github.com/haciyil38/Projet_IA_G-n-rative_AISCA
 cd iagen
 
 text
@@ -68,68 +68,45 @@ streamlit run app.py
 
 text
 
-### Architecture du système
-
-┌─────────────────┐
-│ Utilisateur │
-│ (Questionnaire)│
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ SBERT Local │
-│ (Embeddings) │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ RAG System │
-│ (Retrieval) │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ Hybrid GenAI │
-│ Ollama/Gemini │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ Résultats │
-│ Plans + Bios │
-└─────────────────┘
-
-text
-
 ## 📁 Structure du projet
 
 iagen/
 ├── app.py # Application Streamlit principale
 ├── config.py # Configuration centralisée
 ├── embeddings.py # Gestion embeddings SBERT
-├── encode_repository.py # Pré-calcul embeddings
+├── encode_repository.py # Pré-calcul des embeddings
 ├── requirements.txt # Dépendances Python
 ├── .env.example # Template variables d'environnement
+│
 ├── data/
-│ ├── repository.json # Référentiel compétences
+│ ├── repository.json # Référentiel des compétences
 │ └── repo_embeddings.npz # Embeddings pré-calculés (généré)
-├── genai/
-│ ├── client.py # Client Gemini
-│ ├── ollama_client.py # Client Ollama (local)
-│ ├── hybrid_generator.py # Générateur hybride
-│ ├── cache_manager.py # Système de cache
-│ └── generator.py # Générateur original
-├── nlp/
-│ ├── scoring.py # Calcul similarité
-│ └── scoring_blocks.py # Scoring par blocs
-├── rag/
-│ ├── retriever.py # Récupération compétences
-│ ├── context_builder.py # Construction contexte
-│ └── job_recommender.py # Recommandation métiers
-└── tests/
-├── test_embeddings.py
-├── test_scoring.py
-└── test_rag.py
+│
+├── genai/ # Module IA Générative
+│ ├── init.py
+│ ├── client.py # Client Google Gemini
+│ ├── ollama_client.py # Client Ollama (LLM local)
+│ ├── hybrid_generator.py # Générateur hybride multi-provider
+│ ├── cache_manager.py # Système de cache intelligent
+│ └── generator.py # Générateur Gemini original
+│
+├── nlp/ # Module NLP & Scoring
+│ ├── init.py
+│ ├── scoring.py # Calcul de similarité sémantique
+│ └── scoring_blocks.py # Scoring par blocs de compétences
+│
+├── rag/ # Module RAG (Retrieval-Augmented Generation)
+│ ├── init.py
+│ ├── retriever.py # Récupération des compétences pertinentes
+│ ├── context_builder.py # Construction du contexte enrichi
+│ └── job_recommender.py # Recommandation de métiers
+│
+└── tests/ # Tests unitaires
+├── init.py
+├── test_embeddings.py # Tests des embeddings SBERT
+├── test_scoring.py # Tests du système de scoring
+├── test_rag.py # Tests du système RAG
+└── test_genai.py # Tests de l'IA générative
 
 text
 
@@ -154,7 +131,7 @@ text
    - Installation : `brew install ollama`
 
 2. **Google Gemini (Cloud - Recommandé pour production)**
-   - Nécessite clé API (300$ crédits gratuits)
+   - Nécessite clé API 
    - Configuration dans `.env`
    - Obtenir clé : https://ai.google.dev/
 
@@ -188,16 +165,14 @@ Ce projet répond aux exigences suivantes :
 
 ## 🤝 Contribution
 
-Projet académique - EFREI Paris 2024-2025
+Projet académique - EFREI Paris 2025-2026
 
 ## 📝 Licence
 
-Projet éducatif - Tous droits réservés
+Projet éducatif dans le but de notre mastère
 
 ## 👥 Auteur
 
-Haci Yilmazer - EFREI Paris
+Haci
+Neïl
 
-## 📞 Support
-
-Pour toute question sur le projet, consultez la documentation dans `/docs`

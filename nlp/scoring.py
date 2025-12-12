@@ -1,183 +1,94 @@
 """
-Module de calcul des scores de similarité sémantique.
-Exigence EF2.3 : Similarité cosinus
+Module de calcul de similarité sémantique.
 """
-import numpy as np
 import torch
-from typing import List, Dict, Union
-from embeddings import EmbeddingManager
-from encode_repository import EmbeddingsLoader
+from typing import List, Tuple
+from embeddings import get_embedder, SBERTEmbeddings
+from config import SIMILARITY_THRESHOLD, SBERT_MODEL_TYPE
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-class SimilarityScorer:
-    """Calcule les scores de similarité entre textes utilisateur et compétences."""
+class SemanticScorer:
+    """Calcule les scores de similarité sémantique."""
     
     def __init__(self):
-        """Initialise le scorer avec le gestionnaire d'embeddings."""
-        self.embedding_manager = EmbeddingManager()
-        self.embeddings_loader = EmbeddingsLoader()
+        """Initialise le scorer."""
+        self.embedder = get_embedder(SBERT_MODEL_TYPE)
+        logger.info("SemanticScorer initialisé")
     
-    def calculate_competency_similarity(
+    def score_texts(
+        self, 
+        queries: List[str], 
+        references: List[str]
+    ) -> torch.Tensor:
+        """
+        Calcule les scores de similarité.
+        
+        Args:
+            queries: Textes requêtes
+            references: Textes de référence
+        
+        Returns:
+            Matrice de similarité
+        """
+        query_embeddings = self.embedder.encode(queries)
+        ref_embeddings = self.embedder.encode(references)
+        
+        similarities = self.embedder.cosine_similarity(query_embeddings, ref_embeddings)
+        return similarities
+    
+    def find_best_matches(
         self,
-        user_text: str,
-        competency_id: str = None,
-        competency_embedding: np.ndarray = None
-    ) -> float:
+        queries: List[str],
+        references: List[str],
+        threshold: float = SIMILARITY_THRESHOLD
+    ) -> List[List[Tuple[int, float]]]:
         """
-        Calcule la similarité entre un texte utilisateur et une compétence.
-        Exigence EF2.3
+        Trouve les meilleures correspondances.
         
         Args:
-            user_text: Texte décrivant l'expérience utilisateur
-            competency_id: ID de la compétence (si None, utiliser competency_embedding)
-            competency_embedding: Embedding direct de la compétence
+            queries: Textes requêtes
+            references: Textes de référence
+            threshold: Seuil minimum
         
         Returns:
-            Score de similarité entre 0 et 1
-        
-        Example:
-            scorer = SimilarityScorer()
-            score = scorer.calculate_competency_similarity(
-                "I clean data with pandas",
-                competency_id="C01"
-            )
+            Liste de (index, score) pour chaque requête
         """
-        # Encoder le texte utilisateur
-        user_embedding = self.embedding_manager.encode_texts(user_text)
+        similarities = self.score_texts(queries, references)
         
-        # Obtenir l'embedding de la compétence
-        if competency_embedding is None:
-            comp_ids, comp_embeddings = self.embeddings_loader.get_competency_embeddings()
-            try:
-                comp_idx = comp_ids.index(competency_id)
-                competency_embedding = comp_embeddings[comp_idx]
-            except ValueError:
-                raise ValueError(f"Compétence {competency_id} non trouvée")
+        matches = []
+        for i in range(len(queries)):
+            query_matches = []
+            for j in range(len(references)):
+                score = similarities[i][j].item()
+                if score >= threshold:
+                    query_matches.append((j, score))
+            
+            query_matches.sort(key=lambda x: x[1], reverse=True)
+            matches.append(query_matches)
         
-        # Calculer similarité cosinus
-        similarity = self.embedding_manager.calculate_similarity(
-            user_embedding,
-            torch.tensor(competency_embedding)
-        )
-        
-        # Normaliser entre 0 et 1
-        normalized_score = self.normalize_score(similarity.item())
-        
-        return normalized_score
-    
-    def calculate_user_vs_all_competencies(
-        self,
-        user_texts: List[str]
-    ) -> Dict[str, float]:
-        """
-        Calcule la similarité d'un utilisateur avec toutes les compétences.
-        
-        Args:
-            user_texts: Liste des réponses utilisateur
-        
-        Returns:
-            Dict {comp_id: max_similarity_score}
-        
-        Example:
-            scores = scorer.calculate_user_vs_all_competencies([
-                "I analyze data with Python",
-                "I build ML models"
-            ])
-        """
-        # Encoder toutes les réponses utilisateur
-        user_embeddings = self.embedding_manager.encode_texts(user_texts)
-        
-        # Charger embeddings des compétences
-        comp_ids, comp_embeddings = self.embeddings_loader.get_competency_embeddings()
-        comp_embeddings_tensor = torch.tensor(comp_embeddings)
-        
-        # Calculer matrice de similarité
-        similarity_matrix = self.embedding_manager.calculate_similarity_matrix(
-            user_embeddings,
-            comp_embeddings_tensor
-        )
-        
-        # Pour chaque compétence, prendre le score max parmi toutes les réponses
-        max_scores = similarity_matrix.max(dim=0).values
-        
-        # Créer dictionnaire {comp_id: score}
-        scores_dict = {}
-        for comp_id, score in zip(comp_ids, max_scores):
-            scores_dict[comp_id] = self.normalize_score(score.item())
-        
-        return scores_dict
-    
-    def normalize_score(self, score: float) -> float:
-        """
-        Normalise un score de similarité entre 0 et 1.
-        
-        Args:
-            score: Score brut (peut être entre -1 et 1 pour cosinus)
-        
-        Returns:
-            Score normalisé entre 0 et 1
-        """
-        # Similarité cosinus est déjà entre -1 et 1
-        # La normaliser entre 0 et 1: (score + 1) / 2
-        # Mais en pratique SBERT donne déjà des scores positifs
-        normalized = max(0.0, min(1.0, score))
-        return normalized
-    
-    def get_top_competencies(
-        self,
-        user_texts: List[str],
-        top_k: int = 10,
-        threshold: float = 0.3
-    ) -> List[tuple]:
-        """
-        Retourne les top K compétences les plus pertinentes.
-        
-        Args:
-            user_texts: Réponses utilisateur
-            top_k: Nombre de compétences à retourner
-            threshold: Seuil minimum de similarité
-        
-        Returns:
-            Liste de (comp_id, score, description) triée par score décroissant
-        """
-        scores = self.calculate_user_vs_all_competencies(user_texts)
-        metadata = self.embeddings_loader.get_competency_metadata()
-        
-        # Filtrer par seuil et trier
-        filtered_scores = [
-            (comp_id, score, metadata[comp_id]['description'])
-            for comp_id, score in scores.items()
-            if score >= threshold
-        ]
-        
-        # Trier par score décroissant
-        sorted_scores = sorted(filtered_scores, key=lambda x: x[1], reverse=True)
-        
-        return sorted_scores[:top_k]
+        return matches
 
 
 if __name__ == "__main__":
-    print("\nTest du module scoring.py\n")
+    print("\nTest du semantic scorer\n")
     
-    scorer = SimilarityScorer()
+    scorer = SemanticScorer()
     
-    # Test avec réponses utilisateur
-    user_responses = [
-        "I have experience cleaning and preprocessing data with pandas",
-        "I create visualizations with matplotlib"
+    queries = ["Python programming", "Machine learning"]
+    references = [
+        "Python for data science",
+        "Deep learning with neural networks",
+        "Java programming"
     ]
     
-    print("Réponses utilisateur:")
-    for i, resp in enumerate(user_responses, 1):
-        print(f"  {i}. {resp}")
-    print()
+    matches = scorer.find_best_matches(queries, references)
     
-    # Calculer scores
-    top_comps = scorer.get_top_competencies(user_responses, top_k=5)
-    
-    print("Top 5 compétences identifiées:")
-    for comp_id, score, description in top_comps:
-        print(f"  {comp_id}: {description}")
-        print(f"    Score: {score:.3f}")
-    
-    print("\nTest terminé")
+    for i, query in enumerate(queries):
+        print(f"Query: {query}")
+        for ref_idx, score in matches[i][:2]:
+            print(f"  -> {references[ref_idx]}: {score:.3f}")
+        print()

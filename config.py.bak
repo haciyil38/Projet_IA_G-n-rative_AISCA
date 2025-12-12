@@ -49,9 +49,3 @@ QUESTIONS = [
     "Avez-vous de l'expérience en communication de résultats techniques à des non-techniciens ?",
     "Quels sont vos domaines d'intérêt en data science (NLP, computer vision, time series, etc.) ?"
 ]
-
-# Modèle SBERT
-SBERT_MODEL_TYPE = 'business'
-
-# Seuil de similarité ajusté (plus strict)
-SIMILARITY_THRESHOLD = 0.45  # Augmenté de 0.3 à 0.45

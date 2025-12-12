@@ -1,53 +1,65 @@
 {
-  "competency_blocks": [
-    {
-      "block_id": "B01",
-      "block_name": "Data Analysis",
-      "competencies": [
-        {
-          "comp_id": "C01",
-          "description": "data cleaning and preprocessing with pandas",
-          "keywords": ["pandas", "preprocessing", "cleaning", "data quality"]
-        },
-        {
-          "comp_id": "C02",
-          "description": "data visualization with matplotlib and seaborn",
-          "keywords": ["visualization", "matplotlib", "seaborn", "charts"]
-        },
-        {
-          "comp_id": "C03",
-          "description": "statistical analysis and hypothesis testing",
-          "keywords": ["statistics", "hypothesis testing", "analysis"]
-        }
-      ]
-    },
-    {
-      "block_id": "B02",
-      "block_name": "Machine Learning",
-      "competencies": [
-        {
-          "comp_id": "C04",
-          "description": "supervised learning classification and regression",
-          "keywords": ["classification", "regression", "supervised learning"]
-        },
-        {
-          "comp_id": "C05",
-          "description": "neural networks and deep learning",
-          "keywords": ["neural networks", "deep learning", "tensorflow", "pytorch"]
-        }
-      ]
-    }
-  ],
-  "job_profiles": [
-    {
-      "job_id": "J01",
-      "job_title": "Data Analyst",
-      "required_competencies": ["C01", "C02", "C03"]
-    },
-    {
-      "job_id": "J02",
-      "job_title": "Machine Learning Engineer",
-      "required_competencies": ["C01", "C04", "C05"]
-    }
-  ]
+  "Data Scientist": {
+    "Data Analysis": [
+      {"id": "DS_DA_01", "description": "Data manipulation pandas numpy data wrangling preprocessing", "weight": 3, "details": "Essential"},
+      {"id": "DS_DA_02", "description": "Exploratory data analysis EDA statistical analysis data investigation", "weight": 3, "details": "Critical"},
+      {"id": "DS_DA_03", "description": "Data cleaning preprocessing transformation ETL", "weight": 2, "details": "Important"}
+    ],
+    "Machine Learning": [
+      {"id": "DS_ML_01", "description": "Supervised learning regression classification algorithms scikit-learn", "weight": 5, "details": "Core"},
+      {"id": "DS_ML_02", "description": "Feature engineering selection extraction creation", "weight": 4, "details": "Important"},
+      {"id": "DS_ML_03", "description": "Model evaluation validation cross-validation metrics accuracy precision recall", "weight": 4, "details": "Critical"},
+      {"id": "DS_ML_04", "description": "Random Forest XGBoost LightGBM gradient boosting ensemble methods", "weight": 4, "details": "Advanced"},
+      {"id": "DS_ML_05", "description": "Neural Networks deep learning keras tensorflow pytorch", "weight": 3, "details": "Advanced"}
+    ],
+    "Programming": [
+      {"id": "DS_PR_01", "description": "Python programming data science pandas numpy scipy scikit-learn", "weight": 5, "details": "Primary"},
+      {"id": "DS_PR_02", "description": "SQL database queries data extraction MySQL PostgreSQL", "weight": 3, "details": "Essential"}
+    ],
+    "Visualization": [
+      {"id": "DS_VZ_01", "description": "Data visualization matplotlib seaborn plotly charts graphs dashboards", "weight": 3, "details": "Communication"},
+      {"id": "DS_VZ_02", "description": "Business intelligence Tableau Power BI reporting analytics dashboards", "weight": 2, "details": "Professional"}
+    ],
+    "Statistics": [
+      {"id": "DS_ST_01", "description": "Statistical analysis hypothesis testing inference probability distributions", "weight": 4, "details": "Foundation"},
+      {"id": "DS_ST_02", "description": "Descriptive statistics mean median variance standard deviation", "weight": 2, "details": "Basic"}
+    ]
+  },
+  "Data Analyst": {
+    "Data Analysis": [
+      {"id": "DA_DA_01", "description": "Data manipulation pandas excel data wrangling cleaning", "weight": 5, "details": "Core"},
+      {"id": "DA_DA_02", "description": "Exploratory data analysis EDA insights patterns trends", "weight": 4, "details": "Essential"},
+      {"id": "DA_DA_03", "description": "Statistical analysis descriptive statistics reporting metrics KPIs", "weight": 4, "details": "Important"}
+    ],
+    "Visualization": [
+      {"id": "DA_VZ_01", "description": "Data visualization matplotlib seaborn charts graphs plots", "weight": 4, "details": "Key"},
+      {"id": "DA_VZ_02", "description": "Business intelligence Tableau Power BI dashboards reports analytics", "weight": 4, "details": "Professional"}
+    ],
+    "Programming": [
+      {"id": "DA_PR_01", "description": "Python data analysis pandas numpy matplotlib", "weight": 4, "details": "Primary"},
+      {"id": "DA_PR_02", "description": "SQL database queries joins aggregations data extraction", "weight": 5, "details": "Essential"}
+    ],
+    "Statistics": [
+      {"id": "DA_ST_01", "description": "Descriptive statistics mean median mode variance analysis", "weight": 3, "details": "Foundation"}
+    ]
+  },
+  "Machine Learning Engineer": {
+    "Machine Learning": [
+      {"id": "ML_ML_01", "description": "Deep learning neural networks CNN RNN LSTM transformers", "weight": 5, "details": "Core"},
+      {"id": "ML_ML_02", "description": "Model deployment productionization API REST serving inference", "weight": 5, "details": "Critical"},
+      {"id": "ML_ML_03", "description": "MLOps model monitoring versioning CI/CD pipelines automation", "weight": 4, "details": "Important"},
+      {"id": "ML_ML_04", "description": "Advanced algorithms XGBoost neural networks ensemble methods optimization", "weight": 4, "details": "Expert"}
+    ],
+    "Programming": [
+      {"id": "ML_PR_01", "description": "Python programming advanced OOP design patterns software engineering", "weight": 5, "details": "Expert"},
+      {"id": "ML_PR_02", "description": "Software engineering best practices testing debugging version control git", "weight": 4, "details": "Production"}
+    ],
+    "Cloud": [
+      {"id": "ML_CL_01", "description": "Cloud platforms AWS GCP Azure deployment infrastructure", "weight": 4, "details": "Deployment"},
+      {"id": "ML_CL_02", "description": "Containerization Docker Kubernetes orchestration microservices", "weight": 3, "details": "DevOps"}
+    ],
+    "Data Analysis": [
+      {"id": "ML_DA_01", "description": "Data preprocessing feature engineering pipeline ETL transformation", "weight": 3, "details": "Pipeline"}
+    ]
+  }
 }
